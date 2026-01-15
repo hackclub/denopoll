@@ -20,7 +20,6 @@ export const app = new App({
   token: process.env.SLACK_TOKEN,
   appToken: process.env.SLACK_APP_TOKEN,
   socketMode: true,
-  receiver,
 });
 
 app.command("/denopoll", async ({ client, ack, command }) => {
