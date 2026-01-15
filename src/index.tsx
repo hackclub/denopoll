@@ -18,6 +18,8 @@ import { postPoll, refreshPoll, togglePoll } from "./pollUtil";
 
 export const app = new App({
   token: process.env.SLACK_TOKEN,
+  appToken: process.env.SLACK_APP_TOKEN,
+  socketMode: true,
   receiver,
 });
 
@@ -462,7 +464,7 @@ app.view("message-toggle", async ({ ack, body, view }) => {
 });
 
 async function main() {
-  await app.start(parseInt(process.env.PORT as string) || 3000);
+  await app.start();
   console.log("App started");
 }
 
