@@ -23,26 +23,27 @@ export const app = new App({
 });
 
 app.command("/denopoll", async ({ client, ack, command }) => {
-  await client.conversations
-    .info({
+  try {
+    await client.conversations.info({
       channel: command.channel_id,
-    })
-    .then(async () => {
-      await client.views.open({
-        trigger_id: command.trigger_id,
-        view: createPollModal(command.channel_id, command.text),
-      });
-    
-      await ack();
-    })
-    .catch(async (e) => {
-      if (e.data?.error === "channel_not_found") {
-        await ack({
-          text: "This is a private channel - please add this app to it in the channel settings before creating a poll.",
-        });
-        return;
-      }
     });
+
+    await ack();
+
+    await client.views.open({
+      trigger_id: command.trigger_id,
+      view: createPollModal(command.channel_id, command.text),
+    });
+  } catch (e: any) {
+    if (e.data?.error === "channel_not_found") {
+      await ack({
+        text: "This is a private channel - please add this app to it in the channel settings before creating a poll.",
+      });
+    } else {
+      await ack();
+      console.error("Error in /denopoll:", e);
+    }
+  }
 });
 
 app.command("/denopolls", async ({ ack, respond, command }) => {

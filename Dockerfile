@@ -15,4 +15,4 @@ RUN npx prisma generate
 
 RUN yarn build
 
-CMD ["yarn", "start"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss --skip-generate && yarn start"]
